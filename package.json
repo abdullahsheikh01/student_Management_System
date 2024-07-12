@@ -1,9 +1,13 @@
 {
   "name": "student_management_system-6600",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "This is my simple console based student management system.\r This project has the feature of enrolling a new students in the given courses also has the features of viewing fees and paying of fees and many more features.",
   "main": "index.js",
   "type": "module",
+  "publishConfig":{
+    "access":"public"
+  },
+  "bin": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,3 +1,4 @@
+#!/usr/bin/env node 
 // Importing Inquirer 
 import inquirer from "inquirer";
 //  Welcome Line 
@@ -43,7 +44,6 @@ class Student {
         }
     }
 }
-const std1 = new Student("Abdullah Shaikh", "Kamran Ahmed");
 // Making a class of a Course
 class Course {
     name;
@@ -75,8 +75,9 @@ class Course {
         student.feesRemaining += this.fees;
     }
 }
-const course1 = new Course("AI", 6000, 80000);
-const course2 = new Course("TS", 4500, 40000);
+const course1 = new Course("Artificial Intelligence", 6000, 80000);
+const course2 = new Course("TypeScript", 4500, 40000);
+const course3 = new Course("Python", 6000, 10000);
 // Making a App for this project
 async function app() {
     const q1 = await inquirer.prompt({
@@ -90,6 +91,7 @@ async function app() {
         case "View Students Data":
             if (Student.allStudents.length === 0) {
                 console.log("There is no students register");
+                func4();
             }
             else {
                 const q2 = await inquirer.prompt({
@@ -135,15 +137,21 @@ async function app() {
             func4();
             break;
         case "Paying Fees":
-            const q4 = await inquirer.prompt([
-                {
-                    name: "q1",
-                    message: "Which Student's fees you want to pay?",
-                    type: "list",
-                    choices: func1("Fees", "No")
-                }
-            ]);
-            payingfees(q4.q1);
+            if (Student.allStudents.length === 0) {
+                console.log("Can't pay fees because there are not any students");
+                func4();
+            }
+            else {
+                const q4 = await inquirer.prompt([
+                    {
+                        name: "q1",
+                        message: "Which Student's fees you want to pay?",
+                        type: "list",
+                        choices: func1("Fees", "No")
+                    }
+                ]);
+                payingfees(q4.q1);
+            }
             break;
         case "View Courses Data":
             let arr = ["All Courses Data"];
@@ -156,10 +164,15 @@ async function app() {
                 type: "list",
                 choices: arr
             });
+            let arr2 = [];
             for (const course of Course.allCourses) {
-                if (q7.q1 === course.name) {
+                if (q7.q1 == course.name) {
                     console.log(course);
+                    arr2.push(course);
                 }
+            }
+            if (arr2.length === 0) {
+                console.log(Course.allCourses);
             }
             func4();
             break;
@@ -270,39 +283,45 @@ async function payingfees(value1) {
         }
     }
     let vari = func5(value1);
-    const q6 = await inquirer.prompt({
-        name: "q1",
-        type: "number",
-        message: `Write the amount of fees paying the amount should be equal or lesser than ${vari?.feesRemaining}`
-    });
-    if (q6.q1 > vari.feesRemaining) {
-        console.log("OOP's The entered fees is greater than remaining fees");
-        func();
-    }
-    else if (q6.q1 < 0) {
-        console.log("The amount of fees should be in positive value");
-        func();
-    }
-    else if (q6.q1 == 0) {
-        console.log("The paying value can't be zero");
-        func();
-    }
-    else if (q6.q1 <= vari.feesRemaining) {
-        let value = q6.q1;
-        vari.payingfees(value);
-        let a;
-        if (vari.feesRemaining == 0) {
-            a = `Now the fees of ${vari?.name} is completly paid ✅`;
-        }
-        else {
-            a = `Now the Remaining fees of ${vari?.name} is ${vari?.feesRemaining}`;
-        }
-        console.log(`Your entered value of fees: ${value} is paid successfully✅ and ${a}`);
+    if (vari?.feesRemaining == 0) {
+        console.log(`Fees of ${vari.name} is completely paid ✅`);
         func4();
     }
     else {
-        console.log("Invalid Value entered");
-        func();
+        const q6 = await inquirer.prompt({
+            name: "q1",
+            type: "number",
+            message: `Write the amount of fees paying the amount should be equal or lesser than ${vari?.feesRemaining}`
+        });
+        if (q6.q1 > vari.feesRemaining) {
+            console.log("OOP's The entered fees is greater than remaining fees");
+            func();
+        }
+        else if (q6.q1 < 0) {
+            console.log("The amount of fees should be in positive value");
+            func();
+        }
+        else if (q6.q1 == 0) {
+            console.log("The paying value can't be zero");
+            func();
+        }
+        else if (q6.q1 <= vari.feesRemaining) {
+            let value = q6.q1;
+            vari.payingfees(value);
+            let a;
+            if (vari.feesRemaining == 0) {
+                a = `Now the fees of ${vari?.name} is completly paid ✅`;
+            }
+            else {
+                a = `Now the Remaining fees of ${vari?.name} is ${vari?.feesRemaining}`;
+            }
+            console.log(`Your entered value of fees: ${value} is paid successfully✅ and ${a}`);
+            func4();
+        }
+        else {
+            console.log("Invalid Value entered");
+            func();
+        }
     }
 }
 // function func4(value1:string,value2:string,value3:any){

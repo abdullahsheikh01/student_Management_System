@@ -1,3 +1,4 @@
+#!/usr/bin/env node 
 // Importing Inquirer 
 import inquirer from "inquirer";
 //  Welcome Line 
@@ -48,7 +49,6 @@ class Student{
         }
     }
 }
-const std1 : Student = new Student("Abdullah Shaikh","Kamran Ahmed");
 // Making a class of a Course
 class Course{
     name : string;
@@ -80,8 +80,9 @@ class Course{
         student.feesRemaining+=this.fees;
     }
 }
-const course1 : Course = new Course("AI",6000,80000);
-const course2 : Course = new Course("TS",4500,40000);
+const course1 : Course = new Course("Artificial Intelligence",6000,80000);
+const course2 : Course = new Course("TypeScript",4500,40000);
+const course3 : Course = new Course("Python",6000,10000);
 // Making a App for this project
 async function app(){
 const q1 = await inquirer.prompt({
@@ -95,6 +96,7 @@ const q1 = await inquirer.prompt({
     case "View Students Data":
         if(Student.allStudents.length === 0){
             console.log("There is no students register");
+            func4();
         }
         else{
             const q2 = await inquirer.prompt({
@@ -140,6 +142,11 @@ const q1 = await inquirer.prompt({
     func4();
     break;
     case "Paying Fees":
+        if(Student.allStudents.length === 0){
+            console.log("Can't pay fees because there are not any students");
+            func4()
+        }
+        else{
         const q4 = await inquirer.prompt([
             {
                 name : "q1",
@@ -148,7 +155,7 @@ const q1 = await inquirer.prompt({
                 choices : func1("Fees","No")
             }
     ]);
-    payingfees(q4.q1);
+    payingfees(q4.q1);}
     break;
     case "View Courses Data":
         let arr = ["All Courses Data"]
@@ -161,10 +168,15 @@ const q1 = await inquirer.prompt({
             type : "list",
             choices : arr
         });
+        let arr2 = [];
         for(const course of Course.allCourses){
-            if(q7.q1 === course.name){
+            if(q7.q1 == course.name){
                 console.log(course);
+                arr2.push(course)
             }
+        }
+        if(arr2.length === 0){
+            console.log(Course.allCourses);
         }
         func4();
         break;
@@ -275,6 +287,11 @@ async function payingfees(value1: any){
         }
     }
     let vari=  func5(value1);
+    if(vari?.feesRemaining == 0){
+        console.log(`Fees of ${vari.name} is completely paid ✅`);
+        func4();
+    }
+    else{
     const q6 = await inquirer.prompt(
         {
             name : "q1",
@@ -311,7 +328,7 @@ async function payingfees(value1: any){
         console.log("Invalid Value entered");
         func();
     }
-}
+}}
 // function func4(value1:string,value2:string,value3:any){
 //     const std = new Student(value1,value2);
 //     for(let i = 0; i<value3.length ; i++){
